@@ -27,15 +27,19 @@ namespace testCore
                     BiblioDatabase.Current.InitData();
                     Console.WriteLine("初始化数据完成");
                 }
+                else if (cmd == "dropdbs")
+                {
+                    dbs.dropDbs();
+                }
                 else if (cmd == "find")
                 {
                     string s = BiblioDatabase.Current.GetAllString();
                     Console.WriteLine("result:" + s);
                 }
-                else if (cmd == "drop")
+                else if (cmd == "dropcoll")
                 {
                     BiblioDatabase.Current.Drop();
-                    Console.WriteLine("drop完成");
+                    Console.WriteLine("dropcoll完成");
                 }
                 else if (cmd == "elem")
                 {
@@ -58,9 +62,10 @@ namespace testCore
                         + "\r\n" + "init:初始数据"
                         + "\r\n" + "find:获取全部数据"
                         + "\r\n" + "elem:测试emelMatch的例子"
-                        + "\r\n" + "drop:删除数据库"
+                        + "\r\n" + "dropcoll:删除数据库"
                         + "\r\n" + "upload:上传文件"
                         + "\r\n" + "download:下载文件"
+                        + "\r\n" + "dropdbs:清除无用的数据库"
                         ;
                     Console.WriteLine(s);
 
