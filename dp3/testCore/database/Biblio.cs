@@ -6,23 +6,27 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 
-namespace testCore.Entity
+namespace testCore.database
 {
-    public class Biblio
+    // 书目记录
+    public class BiblioItem
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string id { get; set; }
 
-        public List<Identifier> identifiers { get; set; }
+        // ISBN 国际标准书号
+        public List<ISBNItem> isbnList { get; set; }
+
+        // 题名与责任者
+        public List<TitleItem> titleList { get; set; }
+
+
+        //序号，测试用
+        public string no { get; set; }
+
     }
 
-    public class Identifier
-    {
-        public string type { get; set; }
-        public string no { get; set; }
-        public double price { get; set; }
-        public List<string> errorNo { get; set; }
-    }
+
 
 }
