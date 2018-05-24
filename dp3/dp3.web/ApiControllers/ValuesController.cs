@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dp3.kernel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dp3.webapi.Controllers
@@ -20,8 +21,11 @@ namespace dp3.webapi.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            return "value";
+            //return "value";
+
+            return Database.Hello();
         }
+
 
         // POST api/values
         [HttpPost]
