@@ -8,4 +8,8 @@
     <PackageReference Include="MongoDB.Driver" Version="2.6.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\dp3.xml\dp3.xml.csproj" />
+  </ItemGroup>
+
 </Project>

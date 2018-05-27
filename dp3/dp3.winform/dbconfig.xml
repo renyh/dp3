@@ -2,8 +2,6 @@
 <root>
   <datasource servertype="mognodb" servername="mongodb://localhost:27017"  userid="" password=""  />
   <keysize>255</keysize>
-  <idrule>guid</idrule>
-  <seed>1</seed>
-  <containBiblio>true</containBiblio>
-  <contanEntity>true</contanEntity>
+  <db name="biblio" idrule='guid' seed='1' />
+  <db name="entity" idrule='guid' seed='1'/>
 </root>

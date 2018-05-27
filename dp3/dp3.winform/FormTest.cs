@@ -22,9 +22,9 @@ namespace dp3.winform
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // MongoDB连接字符串
-            string connectionString = "mongodb://localhost:27017";
-            BiblioDatabase1.Current.Open(connectionString, "");
+            //// MongoDB连接字符串
+            //string connectionString = "mongodb://localhost:27017";
+            //BiblioDatabase1.Current.Open(connectionString, "");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -48,28 +48,28 @@ namespace dp3.winform
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string s=SClass.Test();
-            MessageBox.Show(s);
+            //string s=SClass.Test();
+            //MessageBox.Show(s);
         }
 
 
 
         private void button3_Click(object sender, EventArgs e)
         {
-            BiblioDatabase1.Current.InitData();
-            MessageBox.Show(this,"初始化数据完成");
+            //BiblioDatabase1.Current.InitData();
+            //MessageBox.Show(this,"初始化数据完成");
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            string s = BiblioDatabase1.Current.GetAllString();
-            this.textBox1.Text = s;
+            //string s = BiblioDatabase1.Current.GetAllString();
+            //this.textBox1.Text = s;
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            BiblioDatabase1.Current.Drop();
-            MessageBox.Show(this, "dropcoll完成");
+            //BiblioDatabase1.Current.Drop();
+            //MessageBox.Show(this, "dropcoll完成");
         }
 
 
