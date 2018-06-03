@@ -4,9 +4,10 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace dp3.standard
+namespace dp3.kernel
 {
     public class BaseDatabase
     {
@@ -20,11 +21,11 @@ namespace dp3.standard
         // 当id是增量序号时，需要维护一个序号种子。
         private int Seed = 0;
 
-        // mongodb client
-        protected MongoClient MClient { get; set; }
+
         // 一个数据库有三类表record,object,一些keys表
-        protected IMongoCollection<Record> RecordCollection { get; set; }
         protected IMongoDatabase Database { get; set; }
+        protected IMongoCollection<Record> RecordCollection { get; set; }
+
 
         public int m_nTimestampSeed = 0;
         // 时间戳种子
@@ -93,13 +94,16 @@ namespace dp3.standard
                 this.Seed = Convert.ToInt32(seedStr);
 
             // 根据连接字符串，打开mongodb库
-            this.MClient = new MongoClient(DbWrapper.Instance.Connection);
-            this.Database = this.MClient.GetDatabase(this.Name);
+            this.Database = DbWrapper.Instance.MClient.GetDatabase(this.Name);
             this.RecordCollection = this.Database.GetCollection<Record>("record");
 
             //todo
             // 创建索引       
         }
+
+        public List<KeyConfig> KeyConfigList = new List<KeyConfig>();
+
+
 
         public int WriteRecord(string recId,
             string xml,
@@ -126,7 +130,6 @@ namespace dp3.standard
             return 0;
         }
 
-
         public int AddRecord(string xml,
             out string outputRecId,
             out string error)
@@ -134,7 +137,7 @@ namespace dp3.standard
             error = "";
             outputRecId = "";
 
-            // 写记录体，先直接把文体转成二进制
+            // 写记录体，先直接把文体转成二进制，后面要改进
             byte[] bXml = System.Text.Encoding.UTF8.GetBytes(xml);
 
             Record record = new Record();
@@ -148,12 +151,27 @@ namespace dp3.standard
             outputRecId = record.recId;
 
             // 写扩展字段
-            this.CreateExtension();
+            this.CreateExtension(xml);
 
             // 写keys文件
-            this.CreateKeys();
+            List<KeyItem> keyList= this.BuildKeys(xml, record.recId);
+
+
+
+            this.WriteKeys(keyList);
 
             return 0;
+        }
+
+        public void WriteKeys(List<KeyItem> keyList)
+        {
+            foreach (KeyItem keyItem in keyList)
+            {
+                string collName = "keys_" + keyItem.from;
+                IMongoCollection<KeyItem> coll= this.Database.GetCollection<KeyItem>(collName);
+
+                coll.InsertOne(keyItem);
+            }
         }
 
 
@@ -188,7 +206,6 @@ namespace dp3.standard
             return null;
         }
 
-
         /// <summary>
         /// 删除
         /// </summary>
@@ -206,18 +223,58 @@ namespace dp3.standard
 
         }
 
-
-
-        public virtual void CreateExtension()
+        public virtual void CreateExtension(string xm)
         {
 
 
         }
 
-        public virtual void CreateKeys()
+        public virtual List<KeyItem>  BuildKeys(string xm, string recId)
         {
-
+            return new List<KeyItem>();
         }
+
+
+        public virtual void WriteKey(string recId,
+            string from,
+            List<string> akey)
+        {
+            
+        }
+
+
+        // 检索
+        public int Search(string word,
+            int maxCount,
+            string from,
+            string match,
+            out List<string> idList,
+            out string error)
+        {
+            idList = new List<string>();
+            error = "";
+            string tableName = "keys_" + from.Trim(); // 这里再去一下空格，前面因为传进来的from多了一个空，怎么也查不出来数据 20180602
+            IMongoCollection<KeyItem> collection = this.Database.GetCollection<KeyItem>(tableName);// "keys_title");
+
+            //mongodb client写法 db.keys_title.find({keystring:{$regex:"庵传"}})  
+            string value = "驼庵";
+            // 下面两种写法都可以
+            //var filter = Builders<KeyItem>.Filter.Regex(f => f.keystring, new BsonRegularExpression(new Regex(value)));
+            var filter = Builders<KeyItem>.Filter.Regex(f => f.keystring, "/"+value+"/");
+            var result = collection.Find(filter).ToList() ;
+            foreach (KeyItem item in result)
+            {
+                idList.Add(item.ToJson());  // id要去重 todo
+            }
+
+            // 这两种方法有空也试试
+            //var filterRegex = Builders<KeyItem>.Filter.Regex("keystring", new BsonRegularExpression("驼庵"));
+            //var filter = new BsonDocument {{ parameterName, new BsonDocument { { "$regex", value }, { "$options", "i" } } } }
+            
+            return 0;
+        }
+
+
     }
 
 

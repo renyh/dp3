@@ -1,4 +1,4 @@
-﻿using dp3.standard;
+﻿using dp3.kernel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

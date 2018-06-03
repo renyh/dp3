@@ -1,13 +1,19 @@
 ﻿using dp3.xml;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace dp3.standard
+namespace dp3.kernel
 {
     public class DbWrapper
     {
+        #region 常量
+        public const string C_db_biblio = "biblio";
+        public const string C_db_item = "item";
+        #endregion
+
         #region 单一实例
 
         static DbWrapper _instance;
@@ -33,6 +39,9 @@ namespace dp3.standard
 
         // 数据库连接字符串，根据datasoure解析，目前只支持mongodb
         public string Connection = "";
+        // mongodb client
+        public MongoClient MClient { get; set; }
+
         // 检索点最大长度，超过此长度要截取，前期先不考虑
         private int keysize;
 
@@ -66,6 +75,8 @@ namespace dp3.standard
             </root>
              */
             this.Connection = DomUtil.GetElementAttr(root, "datasource", "servername");
+            this.MClient = new MongoClient(this.Connection);
+
             string keysizeStr = DomUtil.GetElementText(root, "keysize");
             this.keysize = Convert.ToInt32(keysize);
 
@@ -88,6 +99,11 @@ namespace dp3.standard
             }
 
             return 0;
+        }
+
+        public void DropDatabase(string dbName)
+        {
+            this.MClient.DropDatabase(dbName);
         }
 
         // dbname是固定值
@@ -193,24 +209,76 @@ namespace dp3.standard
         }
 
 
-        public long DeleteRes(string dbName,
-    string recId,
-    out string error)
+        // 获取检索途径
+        public List<string> GetFroms(string dbName)
         {
-            error = "";
+            List<string> list = new List<string>();
 
             BaseDatabase db = this.GetDb(dbName);
-            if (db == null)
+
+            foreach (KeyConfig item in db.KeyConfigList)
             {
-                error = "未找到[" + dbName + "]对应的数据库";
-                return -1;
+                
+                list.Add(item.Caption + " " + item.From);
+
             }
-
-            long lRet = db.Delete(recId);
-
-            return lRet;
+            return list;
+        }
 
 
+        // 删除记录
+        public long DeleteRes(string dbName,
+            string recId,
+            out string error)
+                {
+                    error = "";
+
+                    BaseDatabase db = this.GetDb(dbName);
+                    if (db == null)
+                    {
+                        error = "未找到[" + dbName + "]对应的数据库";
+                        return -1;
+                    }
+
+                    long lRet = db.Delete(recId);
+
+                    return lRet;
+
+
+                }
+
+
+
+
+        // 生成检索点
+        public List<KeyItem> BuildKeys(string dbName,
+            string xml,
+            string recId)
+        {
+            BaseDatabase db = this.GetDb(dbName);
+
+            return db.BuildKeys(xml,recId);
+        }
+
+        // 检索
+        public int Search(string dbName,
+            string word, 
+            int maxCount,
+            string from,
+            string match,
+            out List<string> idList,
+            out string error)
+        {
+            error = "";
+            idList = new List<string>();
+            BaseDatabase db = this.GetDb(dbName);
+
+            return db.Search(word,
+                maxCount,
+                from,
+                match,
+                out idList,
+                out error);
         }
     }
 }

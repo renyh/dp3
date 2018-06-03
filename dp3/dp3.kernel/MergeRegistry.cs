@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace dp3.standard
+namespace dp3.kernel
 {
     ///// <summary>
     ///// 书目记录合并策略

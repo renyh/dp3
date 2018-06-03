@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace dp3.standard
+namespace dp3.kernel
 {
     public class Record
     {

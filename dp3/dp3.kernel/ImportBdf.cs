@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace dp3.standard
+namespace dp3.kernel
 {
     public class ImportBdf
     {

@@ -1,4 +1,4 @@
-﻿using dp3.standard;
+﻿using dp3.kernel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,6 +32,8 @@ namespace dp3.winform
             }
 
             this.textBox_xml.Text = info;
+
+            MessageBox.Show(this, "ok");
         }
 
         private void button_del_Click(object sender, EventArgs e)
@@ -83,16 +85,53 @@ namespace dp3.winform
 
             if (dlg.ShowDialog() != DialogResult.OK)
                 return;
+            
 
-            this.textBox_source_fileName.Text = dlg.FileName;
+            string fileName = dlg.FileName;
+            string strError = "";
+            int nRet = ImportBdf.DoImport(fileName,
+                out strError);
+            if (nRet == -1)
+            {
+                MessageBox.Show(this, "出错:" + strError);
+                return;
+            }
 
-
+            MessageBox.Show(this, "导入成功" + nRet + "条");
 
         }
 
 
 
         private void button_init_Click(object sender, EventArgs e)
+        {
+            DbWrapper.Instance.DropDatabase("biblio");
+            MessageBox.Show(this, "ok");
+        }
+
+        private void button_buildKeys_Click(object sender, EventArgs e)
+        {
+            string xml = this.textBox_xml.Text.Trim();
+            try
+            {
+                List<KeyItem> list = DbWrapper.Instance.BuildKeys("biblio", xml, "");
+                StringBuilder sb = new StringBuilder();
+                foreach (KeyItem item in list)
+                {
+                    sb.AppendLine(item.Drop());
+                    sb.AppendLine("===");
+                }
+                this.textBox_xml.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message);
+                return;
+            }
+
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
         {
             // 先把配置文件放在应用程序里，后面再放到另外的数据目录里。
             string dir = Application.StartupPath;
@@ -104,14 +143,45 @@ namespace dp3.winform
             {
                 MessageBox.Show(this, error);
             }
-            else
-            {
-                MessageBox.Show(this, "初始化完成");
-            }
 
+            //=====
+
+            List<string> froms = DbWrapper.Instance.GetFroms(DbWrapper.C_db_biblio);
+            foreach (string one in froms)
+            {
+                this.comboBox_from.Items.Add(one);
+            }
+        }
+
+        private void button_search_Click(object sender, EventArgs e)
+        {
+            string from = this.comboBox_from.Text;
+            int nIndex = from.IndexOf("- ");
+            from = from.Substring( nIndex+2);
+            string word = this.textBox_word.Text;
+
+            int nRet = 0;
+            string error = "";
+            List<string> idList = null;
+            nRet = DbWrapper.Instance.Search(DbWrapper.C_db_biblio,
+                word,
+                -1,
+                from,
+                "",
+                out idList,
+                out error);
+            MessageBox.Show(this,nRet.ToString());
+                
+        }
+
+        private void comboBox_from_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
 
+        }
     }
 }
