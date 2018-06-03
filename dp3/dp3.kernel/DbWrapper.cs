@@ -107,7 +107,7 @@ namespace dp3.kernel
         }
 
         // dbname是固定值
-        public int WriteRes(string dbName,
+        public long WriteRes(string dbName,
             string recId,
             string xml,
             string opeType,    //操作类型，定义相应常量
@@ -216,7 +216,7 @@ namespace dp3.kernel
 
             BaseDatabase db = this.GetDb(dbName);
 
-            foreach (KeyConfig item in db.KeyConfigList)
+            foreach (KeyCfgItem item in db.KeyCfgList)
             {
                 
                 list.Add(item.Caption + " " + item.From);

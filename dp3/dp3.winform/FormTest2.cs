@@ -52,7 +52,7 @@ namespace dp3.winform
 
             string error = "";
             string outputRecId = "";
-            int nRet = DbWrapper.Instance.WriteRes(dbName,
+            long nRet = DbWrapper.Instance.WriteRes(dbName,
                 "",  //recId
                 xml,
                 "add",  //操作类型

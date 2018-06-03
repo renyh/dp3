@@ -11,6 +11,8 @@ namespace dp3.kernel
 {
     public class BaseDatabase
     {
+
+        #region 成员变量
         // 库句
         private string Name = "";
 
@@ -21,12 +23,39 @@ namespace dp3.kernel
         // 当id是增量序号时，需要维护一个序号种子。
         private int Seed = 0;
 
-
         // 一个数据库有三类表record,object,一些keys表
         protected IMongoDatabase Database { get; set; }
         protected IMongoCollection<Record> RecordCollection { get; set; }
 
+        // 检索点配置
+        public List<KeyCfgItem> KeyCfgList = new List<KeyCfgItem>();
+        // 扩展字段配置
+        public List<KeyCfgItem> ExtFieldList = new List<KeyCfgItem>();
+        #endregion
 
+        #region 构造函数
+
+        // <db name="bible" idrule='guid' seed='1' />
+        public BaseDatabase(XmlNode node)
+        {
+            this.Name = DomUtil.GetElementAttr(node, "", "name");
+            this.IdRule = DomUtil.GetElementAttr(node, "", "idrule");
+
+            string seedStr = DomUtil.GetElementAttr(node, "", "seed");
+            if (string.IsNullOrEmpty(seedStr) == false)
+                this.Seed = Convert.ToInt32(seedStr);
+
+            // 根据连接字符串，打开mongodb库
+            this.Database = DbWrapper.Instance.MClient.GetDatabase(this.Name);
+            this.RecordCollection = this.Database.GetCollection<Record>("record");
+
+            //todo
+            // 创建索引       
+        }
+
+        #endregion
+
+        #region 时间戳
         public int m_nTimestampSeed = 0;
         // 时间戳种子
         public string GetTimestampSeed()
@@ -38,6 +67,7 @@ namespace dp3.kernel
             this.m_nTimestampSeed++;
             return this.m_nTimestampSeed.ToString().PadLeft(4, '0');
         }
+
 
         /*
         // 为数据库中的记录创建时间戳
@@ -82,30 +112,11 @@ namespace dp3.kernel
         }
         */
 
+        #endregion
 
-        // <db name="bible" idrule='guid' seed='1' />
-        public BaseDatabase(XmlNode node)
-        {
-            this.Name = DomUtil.GetElementAttr(node, "", "name");
-            this.IdRule = DomUtil.GetElementAttr(node, "", "idrule");
+        #region 写资料
 
-            string seedStr = DomUtil.GetElementAttr(node, "", "seed");
-            if (string.IsNullOrEmpty(seedStr) == false)
-                this.Seed = Convert.ToInt32(seedStr);
-
-            // 根据连接字符串，打开mongodb库
-            this.Database = DbWrapper.Instance.MClient.GetDatabase(this.Name);
-            this.RecordCollection = this.Database.GetCollection<Record>("record");
-
-            //todo
-            // 创建索引       
-        }
-
-        public List<KeyConfig> KeyConfigList = new List<KeyConfig>();
-
-
-
-        public int WriteRecord(string recId,
+        public long WriteRecord(string recId,
             string xml,
             string opeType,    //操作类型，定义相应常量
             out string outputRecId,
@@ -122,7 +133,7 @@ namespace dp3.kernel
             }
             else if (opeType == "del")
             {
-                return this.DelRecord(recId, out error);
+                return this.Delete(recId);
             }
 
 
@@ -163,6 +174,26 @@ namespace dp3.kernel
             return 0;
         }
 
+        // todo
+        public void WriteBinary()
+        {
+
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="item"></param>
+        public virtual long Delete(String recId)
+        {
+            var filter = Builders<Record>.Filter.Eq("recId", recId);
+            DeleteResult ret = this.RecordCollection.DeleteOne(filter);
+            return ret.DeletedCount;
+        }
+
+
+        #endregion
+
         public void WriteKeys(List<KeyItem> keyList)
         {
             foreach (KeyItem keyItem in keyList)
@@ -175,15 +206,36 @@ namespace dp3.kernel
         }
 
 
-        public int DelRecord(string recId, out string error)
+        
+
+
+
+
+
+ 
+
+
+
+        public virtual void CreateExtension(string xm)
         {
-            error = "";
 
-            var filter = Builders<Record>.Filter.Eq("recId", recId);
-            this.RecordCollection.DeleteOne(filter);
 
-            return 0;
         }
+
+        public virtual List<KeyItem>  BuildKeys(string xm, string recId)
+        {
+            return new List<KeyItem>();
+        }
+
+
+        public virtual void WriteKey(string recId,
+            string from,
+            List<string> akey)
+        {
+            
+        }
+
+        #region 检索
 
         public List<Record> GetAll()
         {
@@ -205,43 +257,6 @@ namespace dp3.kernel
             }
             return null;
         }
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="item"></param>
-        public virtual long Delete(String recId)
-        {
-            var filter = Builders<Record>.Filter.Eq("recId", recId);
-            DeleteResult ret= this.RecordCollection.DeleteOne(filter);
-            return ret.DeletedCount;
-        }
-
-        // todo
-        public void WriteBinary()
-        {
-
-        }
-
-        public virtual void CreateExtension(string xm)
-        {
-
-
-        }
-
-        public virtual List<KeyItem>  BuildKeys(string xm, string recId)
-        {
-            return new List<KeyItem>();
-        }
-
-
-        public virtual void WriteKey(string recId,
-            string from,
-            List<string> akey)
-        {
-            
-        }
-
 
         // 检索
         public int Search(string word,
@@ -273,6 +288,9 @@ namespace dp3.kernel
             
             return 0;
         }
+
+        #endregion
+
 
 
     }

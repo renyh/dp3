@@ -15,15 +15,30 @@ namespace dp3.kernel
         public BiblioDatabase(XmlNode node) : base(node)
         {
             // 定义检索点配置
-            this.KeyConfigList.Add(new KeyConfig(
+            this.KeyCfgList.Add(new KeyCfgItem(
                 "isbn",
                 "ISBN",
                 @"//marc:record/marc:datafield[@tag='010']/marc:subfield[@code='a' or @code='z']"));
 
-            this.KeyConfigList.Add(new KeyConfig(
+            this.KeyCfgList.Add(new KeyCfgItem(
                 "title",
                 "题名",
                 @"//marc:record/marc:datafield[@tag='200' or @tag='225' or @tag='500' or @tag='501' or @tag='503' or @tag='510' or @tag='512' or @tag='513' or @tag='514' or @tag='515' or @tag='516' or @tag='517' or @tag='518' or @tag='520' or @tag='530' or @tag='531' or @tag='532' or @tag='540' or @tag='541' or @tag='545']/marc:subfield[@code='a'] | //marc:record/marc:datafield[@tag='200']/marc:subfield[@code='c'] | //marc:record/marc:datafield[@tag='200' or @tag='225']/marc:subfield[@code='d']"));
+
+
+            // 定义扩展字段
+            //marc:record/marc:datafield[@tag='010']/marc:subfield[@code='a']
+            this.ExtFieldList.Add(new KeyCfgItem(
+                "isbn",
+                "ISBN",
+                @"marc:record/marc:datafield[@tag='010']/marc:subfield[@code='a']"));
+
+            //marc:record/marc:datafield[@tag='200']/marc:subfield[@code='a']
+            this.ExtFieldList.Add(new KeyCfgItem(
+                "title",
+                "题名",
+                @"marc:record/marc:datafield[@tag='200']/marc:subfield[@code='a']"));
+
         }
 
 
@@ -42,7 +57,7 @@ namespace dp3.kernel
             nsmgr.AddNamespace(strPrefix, strUrl);
 
             List<KeyItem> keyList = new List<KeyItem>();
-            foreach (KeyConfig keyConfig in this.KeyConfigList)
+            foreach (KeyCfgItem keyConfig in this.KeyCfgList)
             {
                 // 针对一个条目创建检索点
                  this.CreateKey(domData,
@@ -58,7 +73,7 @@ namespace dp3.kernel
 
         public void CreateKey(XmlDocument dom,
             XmlNamespaceManager nsmgr,
-            KeyConfig keyConfig,
+            KeyCfgItem keyConfig,
             string recId,
             List<KeyItem> keyList)
         {
@@ -129,7 +144,7 @@ namespace dp3.kernel
             nsmgr.AddNamespace(strPrefix, strUrl);
 
             List<KeyItem> keyList = new List<KeyItem>();
-            foreach (KeyConfig keyConfig in this.KeyConfigList)
+            foreach (KeyCfgItem keyConfig in this.KeyCfgList)
             {
                 // 针对一个条目创建检索点
                 List<string> keystringList = this.CreateKey(nav,
