@@ -6,6 +6,7 @@ using System.Text;
 
 namespace dp3.kernel
 {
+    // 记录
     public class Record
     {
         [BsonId]
@@ -18,12 +19,15 @@ namespace dp3.kernel
 
         public string timespan { get; set; }
 
-        public List<Field> extensionFieds { get; set; }
+        // 扩展字段
+        public List<ExtField> extFieds { get; set; }
     }
 
-    public class Field
+    // 扩展字段
+    public class ExtField
     {
-        public string fieldName { get; set; }
-        public string fieldValue { get; set; }
+        public string from { get; set; }
+        public string value { get; set; }
+        public string location { get; set; }
     }
 }
