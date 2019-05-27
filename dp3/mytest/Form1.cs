@@ -1,4 +1,5 @@
-﻿using System;
+﻿//测试
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -69,6 +70,11 @@ namespace mytest
             }
 
             return location;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
