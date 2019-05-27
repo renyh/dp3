@@ -37,24 +37,27 @@
             // 
             // textBox_xml
             // 
-            this.textBox_xml.Location = new System.Drawing.Point(12, 12);
+            this.textBox_xml.Location = new System.Drawing.Point(16, 17);
+            this.textBox_xml.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox_xml.Multiline = true;
             this.textBox_xml.Name = "textBox_xml";
-            this.textBox_xml.Size = new System.Drawing.Size(485, 129);
+            this.textBox_xml.Size = new System.Drawing.Size(665, 179);
             this.textBox_xml.TabIndex = 0;
             // 
             // textBox_xpath
             // 
-            this.textBox_xpath.Location = new System.Drawing.Point(60, 147);
+            this.textBox_xpath.Location = new System.Drawing.Point(82, 206);
+            this.textBox_xpath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox_xpath.Name = "textBox_xpath";
-            this.textBox_xpath.Size = new System.Drawing.Size(356, 25);
+            this.textBox_xpath.Size = new System.Drawing.Size(488, 31);
             this.textBox_xpath.TabIndex = 1;
             // 
             // button_get
             // 
-            this.button_get.Location = new System.Drawing.Point(422, 149);
+            this.button_get.Location = new System.Drawing.Point(580, 209);
+            this.button_get.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button_get.Name = "button_get";
-            this.button_get.Size = new System.Drawing.Size(75, 23);
+            this.button_get.Size = new System.Drawing.Size(103, 32);
             this.button_get.TabIndex = 2;
             this.button_get.Text = "get";
             this.button_get.UseVisualStyleBackColor = true;
@@ -63,32 +66,36 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 152);
+            this.label1.Location = new System.Drawing.Point(16, 213);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(47, 15);
+            this.label1.Size = new System.Drawing.Size(65, 21);
             this.label1.TabIndex = 3;
             this.label1.Text = "XPath";
             // 
             // textBox_result
             // 
-            this.textBox_result.Location = new System.Drawing.Point(12, 209);
+            this.textBox_result.Location = new System.Drawing.Point(16, 293);
+            this.textBox_result.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox_result.Multiline = true;
             this.textBox_result.Name = "textBox_result";
-            this.textBox_result.Size = new System.Drawing.Size(482, 101);
+            this.textBox_result.Size = new System.Drawing.Size(661, 140);
             this.textBox_result.TabIndex = 4;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(675, 322);
+            this.ClientSize = new System.Drawing.Size(928, 451);
             this.Controls.Add(this.textBox_result);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_get);
             this.Controls.Add(this.textBox_xpath);
             this.Controls.Add(this.textBox_xml);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
