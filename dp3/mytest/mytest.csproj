@@ -78,5 +78,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\dp-library\DigitalPlatform.LibraryRestClient\DigitalPlatform.LibraryRestClient.csproj">
+      <Project>{c7c60a11-afc6-4cf2-898f-1f0e2d8d1fa0}</Project>
+      <Name>DigitalPlatform.LibraryRestClient</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigitalPlatform.SIP", "..\d
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigitalPlatform.Z3950", "..\dp-library\DigitalPlatform.Z3950\DigitalPlatform.Z3950.csproj", "{6025E678-DDDA-4393-89B9-FEE61AFBEF15}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigitalPlatform.LibraryRestClient", "..\dp-library\DigitalPlatform.LibraryRestClient\DigitalPlatform.LibraryRestClient.csproj", "{C7C60A11-AFC6-4CF2-898F-1F0E2D8D1FA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{6025E678-DDDA-4393-89B9-FEE61AFBEF15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6025E678-DDDA-4393-89B9-FEE61AFBEF15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6025E678-DDDA-4393-89B9-FEE61AFBEF15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7C60A11-AFC6-4CF2-898F-1F0E2D8D1FA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7C60A11-AFC6-4CF2-898F-1F0E2D8D1FA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7C60A11-AFC6-4CF2-898F-1F0E2D8D1FA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7C60A11-AFC6-4CF2-898F-1F0E2D8D1FA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
