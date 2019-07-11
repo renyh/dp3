@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <datasource servertype="mognodb" servername="mongodb://localhost:27017"  userid="" password=""  />
+  <keysize>255</keysize>
+  <db name="biblio" idrule='guid' seed='1' />
+  <db name="entity" idrule='guid' seed='1'/>
+</root>
